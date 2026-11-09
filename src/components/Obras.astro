@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import ObraCard from './ObraCard.astro';
+import { business } from '../data/business';
+
+const obras = (await getCollection('obras')).sort((a, b) => a.data.order - b.data.order);
+const hasExamples = obras.some((o) => o.data.ejemplo);
+---
+<section id="obras" aria-labelledby="obras-t" class="overflow-hidden border-b border-grafito">
+  <div class="mx-auto max-w-[90rem] px-4 pt-20 sm:px-8 sm:pt-28">
+    <div class="grid gap-6 md:grid-cols-12">
+      <p class="note text-replanteo md:col-span-3">03 — Obras</p>
+      <div class="md:col-span-9">
+        <h2 id="obras-t" class="display text-[clamp(2.25rem,6vw,4.5rem)]">El trabajo,<br />a la vista.</h2>
+        {hasExamples && (
+          <p class="mt-6 max-w-xl text-grafito/80">
+            Esta sección se llena con las obras que ya publicas en <a class="underline decoration-replanteo underline-offset-4 hover:text-replanteo" href={business.instagram.url} rel="noopener" target="_blank">{business.instagram.handle}</a>: cada ficha con sus fotos de antes y después.
+          </p>
+        )}
+      </div>
+    </div>
+  </div>
+
+  <div class="relative mt-14">
+    <ul class="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-4 pb-6 [scrollbar-width:thin] sm:gap-10 sm:px-8 lg:pl-[max(2rem,calc((100vw-90rem)/2+2rem+25%))]" aria-label="Obras" tabindex="0">
+      {obras.map((obra, i) => <li class="contents"><ObraCard obra={obra} index={i} /></li>)}
+    </ul>
+  </div>
+  <div class="mx-auto flex max-w-[90rem] items-center gap-4 px-4 pb-20 pt-6 sm:px-8 sm:pb-28" aria-hidden="true">
+    <span class="h-px flex-1 bg-grafito"></span>
+    <span class="note text-mortero">Desliza →</span>
+  </div>
+</section>

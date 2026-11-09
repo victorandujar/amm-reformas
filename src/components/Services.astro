@@ -1,0 +1,30 @@
+---
+import { services } from '../data/services';
+---
+<section id="oficio" aria-labelledby="oficio-t" class="border-b border-grafito">
+  <div class="mx-auto max-w-[90rem] px-4 py-20 sm:px-8 sm:py-28">
+    <div class="mb-14 grid gap-6 md:grid-cols-12">
+      <p class="note text-replanteo md:col-span-3">01 — Oficio</p>
+      <h2 id="oficio-t" class="display text-[clamp(2.25rem,6vw,4.5rem)] md:col-span-9">Tres cosas,<br />bien hechas.</h2>
+    </div>
+
+    <ol class="border-t border-grafito">
+      {services.map((s, i) => (
+        <li class="group grid gap-6 border-b border-grafito py-10 lg:grid-cols-12 lg:gap-8 lg:py-14">
+          <span class="note text-mortero lg:col-span-1 lg:pt-3">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="display text-[clamp(2.4rem,7vw,4rem)] transition-colors group-hover:text-replanteo lg:col-span-6 lg:text-[clamp(2.5rem,4.2vw,4rem)]">{s.title}</h3>
+          <div class="lg:col-span-5 lg:pt-2">
+            <p class="max-w-prose text-lg leading-relaxed">{s.lead}</p>
+            <ul class="mt-6 grid gap-x-6 sm:grid-cols-2">
+              {s.scope.map((item) => (
+                <li class="note flex gap-3 border-t border-junta py-3 text-grafito/80">
+                  <span class="text-replanteo" aria-hidden="true">+</span>{item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

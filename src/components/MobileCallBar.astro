@@ -1,0 +1,7 @@
+---
+import { telUrl, whatsappUrl } from '../data/business';
+---
+<nav aria-label="Contacto rápido" class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-grafito bg-cal md:hidden">
+  <a href={telUrl} class="note flex min-h-14 items-center justify-center gap-2 border-r border-grafito font-medium">Llamar</a>
+  <a href={whatsappUrl('Hola Alberto, quería información sobre una reforma.')} rel="noopener" target="_blank" class="note flex min-h-14 items-center justify-center gap-2 bg-replanteo font-medium text-cal">WhatsApp</a>
+</nav>

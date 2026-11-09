@@ -1,0 +1,12 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { business } from '../data/business';
+---
+<Legal title={`Aviso legal · ${business.name}`} description={`Aviso legal del sitio web de ${business.name}.`} heading="Aviso legal">
+  <p>En cumplimiento de la Ley 34/2002 de Servicios de la Sociedad de la Información (LSSI-CE), se informa de los datos del titular de este sitio web.</p>
+  <h2>Titular</h2>
+  <p>Nombre: {business.owner} ({business.name})<br />NIF: <mark>pendiente</mark><br />Domicilio: <mark>pendiente</mark>, {business.city}<br />Teléfono: {business.phone.display}</p>
+  <h2>Propiedad intelectual</h2>
+  <p>Los textos, fotografías y diseño de este sitio pertenecen a su titular o se usan con su autorización.</p>
+  <p class="note text-mortero">Documento provisional: se completa con los datos del titular antes de publicar.</p>
+</Legal>
