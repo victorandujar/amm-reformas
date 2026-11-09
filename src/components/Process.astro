@@ -1,21 +1,28 @@
 ---
+import { Image } from 'astro:assets';
 import { steps } from '../data/process';
 ---
-<section id="proceso" aria-labelledby="proceso-t" class="grid-paper border-b border-grafito">
+<section id="proceso" aria-labelledby="proceso-t" class="border-b border-grafito">
   <div class="mx-auto max-w-[90rem] px-4 py-20 sm:px-8 sm:py-28">
     <div class="grid gap-6 md:grid-cols-12">
-      <p class="note text-replanteo md:col-span-3">04 — Cómo trabajo</p>
-      <h2 id="proceso-t" class="display text-[clamp(2.25rem,6vw,4.5rem)] md:col-span-9">De la visita<br />a la entrega.</h2>
+      <p class="note md:col-span-3">04 — Cómo trabajo</p>
+      <div class="md:col-span-9">
+        <h2 id="proceso-t" class="display text-[clamp(2.25rem,6vw,4.5rem)]">De la visita<br />a la entrega.</h2>
+        <p class="mt-6 max-w-xl text-grafito/80">Así avanza un baño de verdad. Cada foto es un momento de la misma obra.</p>
+      </div>
     </div>
 
-    <!-- Regla: cada paso es una marca sobre una cinta métrica -->
     <ol class="mt-16 grid gap-px border border-grafito bg-grafito sm:grid-cols-2 lg:grid-cols-3">
-      {steps.map((s) => (
-        <li class="relative bg-cal p-6 pt-10 sm:p-8 sm:pt-12">
-          <span class="absolute left-6 top-0 h-6 w-px bg-replanteo sm:left-8" aria-hidden="true"></span>
-          <span class="note text-replanteo">Fase {s.n}</span>
-          <h3 class="wide mt-3 text-2xl font-bold uppercase">{s.title}</h3>
-          <p class="mt-3 text-[0.98rem] leading-relaxed text-grafito/80">{s.text}</p>
+      {steps.map((s, i) => (
+        <li class="group relative flex flex-col bg-cal">
+          <div class="relative aspect-[4/3] overflow-hidden">
+            <Image src={s.img} alt={s.alt} widths={[400, 640, 800]} sizes="(min-width:1024px) 30vw, (min-width:640px) 50vw, 100vw" class:list={['h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]', i < 4 && 'grayscale group-hover:grayscale-0']} loading="lazy" />
+            <span class="note absolute left-0 top-0 bg-grafito px-3 py-2 text-cal">Fase {s.n}</span>
+          </div>
+          <div class="p-6 sm:p-8">
+            <h3 class="text-xl font-bold uppercase tracking-tight">{s.title}</h3>
+            <p class="mt-2 text-grafito/80">{s.text}</p>
+          </div>
         </li>
       ))}
     </ol>

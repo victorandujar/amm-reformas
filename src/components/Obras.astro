@@ -1,33 +1,152 @@
 ---
 import { getCollection } from 'astro:content';
-import ObraCard from './ObraCard.astro';
+import { Image } from 'astro:assets';
+import { poster } from '../lib/media';
 import { business } from '../data/business';
 
-const obras = (await getCollection('obras')).sort((a, b) => a.data.order - b.data.order);
-const hasExamples = obras.some((o) => o.data.ejemplo);
+const tipoLabel = { bano: 'Baño', cocina: 'Cocina' } as const;
+const obras = await Promise.all(
+  (await getCollection('obras'))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map(async (o, i) => ({
+      ...o.data,
+      id: o.id,
+      n: String(i + 1).padStart(2, '0'),
+      posterSrc: await poster(o.data.antes.src, 480),
+    })),
+);
+const first = obras[0]!;
+const fmt = (s: number): string => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+const pct = (t: number, d: number): string => `${((t / d) * 100).toFixed(2)}%`;
 ---
-<section id="obras" aria-labelledby="obras-t" class="overflow-hidden border-b border-grafito">
-  <div class="mx-auto max-w-[90rem] px-4 pt-20 sm:px-8 sm:pt-28">
+<section id="obras" aria-labelledby="obras-t" class="grid-paper border-b border-grafito">
+  <div class="mx-auto max-w-[90rem] px-4 py-20 sm:px-8 sm:py-28">
     <div class="grid gap-6 md:grid-cols-12">
-      <p class="note text-replanteo md:col-span-3">03 — Obras</p>
+      <p class="note md:col-span-3">01 — Obras</p>
       <div class="md:col-span-9">
-        <h2 id="obras-t" class="display text-[clamp(2.25rem,6vw,4.5rem)]">El trabajo,<br />a la vista.</h2>
-        {hasExamples && (
-          <p class="mt-6 max-w-xl text-grafito/80">
-            Esta sección se llena con las obras que ya publicas en <a class="underline decoration-replanteo underline-offset-4 hover:text-replanteo" href={business.instagram.url} rel="noopener" target="_blank">{business.instagram.handle}</a>: cada ficha con sus fotos de antes y después.
-          </p>
-        )}
+        <h2 id="obras-t" class="display text-[clamp(2.4rem,6.5vw,5.25rem)]">Antes. Obra.<br />Después.</h2>
+        <p class="mt-6 max-w-xl text-grafito/80">Elige una obra y arrastra la cinta métrica: recorres la reforma fotograma a fotograma, del primer día al último.</p>
       </div>
     </div>
-  </div>
 
-  <div class="relative mt-14">
-    <ul class="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-4 pb-6 [scrollbar-width:thin] sm:gap-10 sm:px-8 lg:pl-[max(2rem,calc((100vw-90rem)/2+2rem+25%))]" aria-label="Obras" tabindex="0">
-      {obras.map((obra, i) => <li class="contents"><ObraCard obra={obra} index={i} /></li>)}
-    </ul>
-  </div>
-  <div class="mx-auto flex max-w-[90rem] items-center gap-4 px-4 pb-20 pt-6 sm:px-8 sm:pb-28" aria-hidden="true">
-    <span class="h-px flex-1 bg-grafito"></span>
-    <span class="note text-mortero">Desliza →</span>
+    <div data-moviola class="mt-14 grid gap-8 lg:grid-cols-12 lg:gap-10">
+      <!-- Índice de obras -->
+      <div class="min-w-0 lg:col-span-4">
+        <p class="note mb-3 text-mortero" id="obras-index-t">Índice · {obras.length} obras</p>
+        <ul class="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 lg:mx-0 lg:block lg:space-y-0 lg:overflow-visible lg:border-t lg:border-grafito lg:px-0" aria-labelledby="obras-index-t">
+          {obras.map((o, i) => (
+            <li class="shrink-0 snap-start lg:border-b lg:border-grafito">
+              <button
+                type="button"
+                data-obra={o.id}
+                data-video={o.video}
+                data-poster={o.posterSrc}
+                data-duracion={o.duracion}
+                data-obra-t={o.capitulos.obra ?? ''}
+                data-despues-t={o.capitulos.despues}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+                aria-controls="moviola-stage"
+                class="group flex w-56 items-center gap-4 border border-grafito bg-cal p-2 pr-4 text-left transition-colors aria-pressed:bg-grafito aria-pressed:text-cal lg:w-full lg:border-0 lg:bg-transparent lg:px-2 lg:py-3 hover:bg-cal-2 aria-pressed:hover:bg-grafito"
+              >
+                <span class="relative h-16 w-12 shrink-0 overflow-hidden bg-grafito-2">
+                  <Image src={o.despues.src} alt="" width={96} height={128} class="h-full w-full object-cover" loading="lazy" />
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="note block opacity-70">{o.n} · {tipoLabel[o.tipo]}</span>
+                  <span class="block truncate font-medium leading-tight">{o.titulo}</span>
+                </span>
+                <span class="note hidden tabular-nums opacity-70 sm:block">{fmt(o.duracion)}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Escenario -->
+      <div class="min-w-0 lg:col-span-4">
+        <div class="relative mx-auto aspect-[9/16] w-full max-w-[min(24rem,calc(64svh*9/16))] overflow-hidden bg-grafito shadow-[10px_10px_0_0_var(--color-grafito)]">
+          <video
+            id="moviola-stage"
+            class="h-full w-full object-cover"
+            src={first.video}
+            poster={first.posterSrc}
+            preload="metadata"
+            muted
+            playsinline
+            controls
+            width="432"
+            height="768"
+            aria-label={`Vídeo de la obra: ${first.titulo}`}
+          ></video>
+          <span data-chapter class="note pointer-events-none absolute left-3 top-3 bg-cal px-2 py-1 text-grafito transition-colors" aria-hidden="true">Antes</span>
+          <button type="button" data-big-play class="absolute inset-0 hidden place-items-center bg-grafito/25 text-cal transition-opacity hover:bg-grafito/35" aria-label="Reproducir la obra">
+            <span class="grid h-20 w-20 place-items-center rounded-full border-2 border-cal bg-grafito/70 text-2xl" aria-hidden="true">▶</span>
+          </button>
+        </div>
+
+        <!-- Cinta métrica / scrubber -->
+        <div class="mx-auto mt-8 w-full max-w-[26rem]">
+          <div class="flex items-center gap-3">
+            <button type="button" data-play class="btn btn-primary h-11 min-h-11 w-11 shrink-0 justify-center p-0" aria-label="Reproducir">
+              <span data-play-icon aria-hidden="true">▶</span>
+            </button>
+            <div class="relative flex-1 py-3" data-tape style="--p:0%">
+              <div class="tape h-5 text-grafito" aria-hidden="true"></div>
+              <div class="pointer-events-none absolute inset-x-0 top-3 h-5 bg-grafito/15 [clip-path:inset(0_calc(100%-var(--p))_0_0)]" aria-hidden="true"></div>
+              <div class="pointer-events-none absolute top-1 h-9 w-0.5 -translate-x-1/2 bg-grafito left-[var(--p)]" aria-hidden="true">
+                <span class="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rotate-45 bg-grafito"></span>
+              </div>
+              <span data-mark="obra" class="pointer-events-none absolute top-0 hidden h-11 border-l border-dashed border-grafito" aria-hidden="true"></span>
+              <span data-mark="despues" class="pointer-events-none absolute top-0 h-11 border-l-2 border-grafito" style={`left:${pct(first.capitulos.despues, first.duracion)}`} aria-hidden="true"></span>
+              <label for="moviola-range" class="sr-only">Recorrer la obra en el tiempo</label>
+              <input id="moviola-range" type="range" min="0" max="1000" step="1" value="0" class="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
+            </div>
+            <span data-time class="note w-20 shrink-0 text-right tabular-nums" aria-hidden="true">0:00 / {fmt(first.duracion)}</span>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2 pl-14">
+            <button type="button" data-jump="antes" class="note border border-grafito px-3 py-1.5 hover:bg-grafito hover:text-cal">← Antes</button>
+            <button type="button" data-jump="obra" class="note hidden border border-grafito px-3 py-1.5 hover:bg-grafito hover:text-cal">En obra</button>
+            <button type="button" data-jump="despues" class="note border border-grafito px-3 py-1.5 hover:bg-grafito hover:text-cal">Después →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ficha de la obra activa -->
+      <div class="min-w-0 lg:col-span-4" aria-live="polite">
+        {obras.map((o, i) => (
+          <article data-ficha={o.id} hidden={i !== 0} class="border-t border-grafito pt-6">
+            <p class="note text-mortero">Obra {o.n} · {tipoLabel[o.tipo]}</p>
+            <h3 class="display mt-3 text-[clamp(1.9rem,3.2vw,2.75rem)]">{o.titulo}</h3>
+            <p class="mt-5 text-grafito/85">{o.resumen}</p>
+            <ul class="mt-6">
+              {o.cambios.map((c) => (
+                <li class="note flex gap-3 border-t border-junta py-3"><span aria-hidden="true">+</span>{c}</li>
+              ))}
+            </ul>
+            <div class="mt-6 grid grid-cols-2 gap-3">
+              <figure>
+                <Image src={o.antes.src} alt={o.antes.alt} widths={[240, 400]} sizes="(min-width:1024px) 12rem, 45vw" class="aspect-[3/4] w-full object-cover grayscale" loading="lazy" />
+                <figcaption class="note mt-2 text-mortero">Antes</figcaption>
+              </figure>
+              <figure>
+                <Image src={o.despues.src} alt={o.despues.alt} widths={[240, 400]} sizes="(min-width:1024px) 12rem, 45vw" class="aspect-[3/4] w-full object-cover" loading="lazy" />
+                <figcaption class="note mt-2">Después</figcaption>
+              </figure>
+            </div>
+            {o.credito && <p class="note mt-5 text-mortero">{o.credito}</p>}
+            {o.instagram && (
+              <a href={o.instagram} rel="noopener" target="_blank" class="note mt-5 inline-block underline underline-offset-4 hover:no-underline">Ver en Instagram ↗</a>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <p class="note mt-14 text-mortero">Vídeos publicados por <a href={business.instagram.url} rel="noopener" target="_blank" class="underline underline-offset-4">{business.instagram.handle}</a></p>
   </div>
 </section>
+
+<script>
+  import { initMoviola } from '../scripts/moviola';
+  document.querySelectorAll<HTMLElement>('[data-moviola]').forEach(initMoviola);
+</script>

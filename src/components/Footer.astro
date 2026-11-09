@@ -1,11 +1,12 @@
 ---
 import { business, telUrl } from '../data/business';
+import Logo from './Logo.astro';
 import { isDemo } from '../lib/site';
 const year = new Date().getFullYear();
 ---
 <footer class="on-dark border-t border-cal/15 bg-grafito pb-24 text-cal md:pb-0">
   <div class="mx-auto max-w-[90rem] px-4 py-14 sm:px-8">
-    <svg viewBox="0 0 620 130" class="w-full max-w-[60rem] text-cal/10" aria-hidden="true" focusable="false"><text x="-4" y="122" fill="currentColor" font-family="Archivo Variable, sans-serif" font-weight="800" font-size="168" style="font-variation-settings:'wdth' 125">AMM</text></svg>
+    <Logo variant="lockup" class="h-28 text-cal sm:h-36" />
     <div class="mt-10 grid gap-10 border-t border-cal/20 pt-10 sm:grid-cols-2 lg:grid-cols-4">
       <div>
         <p class="note text-cal/60">Negocio</p>
@@ -13,7 +14,7 @@ const year = new Date().getFullYear();
       </div>
       <div>
         <p class="note text-cal/60">Contacto</p>
-        <p class="mt-2"><a href={telUrl} class="tabular-nums hover:text-replanteo-claro">{business.phone.display}</a><br /><a href={business.instagram.url} rel="noopener" target="_blank" class="hover:text-replanteo-claro">{business.instagram.handle}</a></p>
+        <p class="mt-2"><a href={telUrl} class="tabular-nums hover:underline">{business.phone.display}</a><br /><a href={business.instagram.url} rel="noopener" target="_blank" class="hover:underline">{business.instagram.handle}</a></p>
       </div>
       <div>
         <p class="note text-cal/60">Zona</p>
@@ -22,8 +23,8 @@ const year = new Date().getFullYear();
       <nav aria-label="Legal">
         <p class="note text-cal/60">Legal</p>
         <ul class="mt-2">
-          <li><a href="/aviso-legal" class="hover:text-replanteo-claro">Aviso legal</a></li>
-          <li><a href="/privacidad" class="hover:text-replanteo-claro">Privacidad</a></li>
+          <li><a href="/aviso-legal" class="hover:underline">Aviso legal</a></li>
+          <li><a href="/privacidad" class="hover:underline">Privacidad</a></li>
         </ul>
       </nav>
     </div>

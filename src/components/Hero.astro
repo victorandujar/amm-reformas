@@ -1,45 +1,70 @@
 ---
-import BathPlan from './plans/BathPlan.astro';
+import { poster } from '../lib/media';
 import { business, whatsappUrl } from '../data/business';
+import hero1 from '../assets/obras/hero-1.jpg';
+import hero2 from '../assets/obras/hero-2.jpg';
+import hero3 from '../assets/obras/hero-3.jpg';
+
+const reels = [
+  { src: '/media/hero/hero-1.mp4', poster: await poster(hero1, 640), label: 'Baño', offset: 'lg:mb-6' },
+  { src: '/media/hero/hero-2.mp4', poster: await poster(hero2, 480), label: 'Cocina', offset: 'lg:mt-14 lg:mb-0' },
+  { src: '/media/hero/hero-3.mp4', poster: await poster(hero3, 480), label: 'Baño', offset: 'lg:mb-10' },
+];
+const lcp = reels[0]!.poster;
 ---
-<section aria-labelledby="hero-t" class="grid-paper relative overflow-hidden border-b border-grafito">
-  <div class="mx-auto grid min-h-[calc(100svh-6.5rem)] max-w-[90rem] grid-cols-12 px-4 pb-10 pt-8 sm:px-8 sm:pb-14">
-    <!-- Plano de fondo: ocupa la composición, no "la mitad derecha" -->
-    <div class="pointer-events-none absolute inset-y-0 right-[-18%] w-[115%] text-grafito opacity-55 sm:right-[-4%] sm:w-[76%] lg:right-[1%] lg:w-[58%]" aria-hidden="true">
-      <BathPlan state="despues" animate uid="hero" title="Planta de un baño reformado" class="h-full w-full" />
-    </div>
+<link rel="preload" as="image" href={lcp} fetchpriority="high" />
+<section aria-labelledby="hero-t" class="on-dark relative isolate overflow-hidden bg-grafito text-cal">
+  <!-- Tríptico de reels: en móvil solo el primero, a sangre -->
+  <div class="absolute inset-0 -z-10 grid grid-cols-1 gap-3 lg:inset-x-8 lg:left-auto lg:w-[56%] lg:grid-cols-3 lg:pb-24 lg:pt-10" aria-hidden="true">
+    {reels.map((r, i) => (
+      <figure class:list={['relative h-full overflow-hidden', i > 0 && 'hidden lg:block', r.offset]}>
+        <video
+          data-autoplay
+          muted
+          loop
+          playsinline
+          preload="none"
+          poster={r.poster}
+          class="h-full w-full object-cover"
+          width="480"
+          height="854"
+        >
+          <source src={r.src} type="video/mp4" />
+        </video>
+        <figcaption class="note absolute left-3 top-3 hidden bg-grafito/80 px-2 py-1 lg:block">{r.label} · después</figcaption>
+      </figure>
+    ))}
+  </div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-t from-grafito via-grafito/60 to-grafito/10 lg:bg-gradient-to-r lg:from-grafito lg:via-grafito/85 lg:to-transparent" aria-hidden="true"></div>
 
-    <!-- Cota vertical que "mide" el titular -->
-    <div class="relative col-span-1 hidden sm:flex" aria-hidden="true">
-      <div class="flex h-full flex-col items-center">
-        <span class="h-3 w-3 border-t border-replanteo"></span>
-        <span class="w-px flex-1 bg-replanteo"></span>
-        <span class="note my-3 text-replanteo [writing-mode:vertical-rl] rotate-180">Sant Boi de Llobregat</span>
-        <span class="w-px flex-1 bg-replanteo"></span>
-        <span class="h-3 w-3 border-b border-replanteo"></span>
-      </div>
-    </div>
+  <div class="mx-auto flex min-h-[calc(100svh-6.5rem)] max-w-[90rem] flex-col justify-between gap-10 px-4 pb-24 pt-8 sm:px-8 md:pb-12 lg:min-h-[44rem]">
+    <p class="note flex flex-wrap items-center gap-x-4 gap-y-1 text-cal/80">
+      <span>{business.owner}</span><span aria-hidden="true">/</span><span>{business.city}</span>
+    </p>
 
-    <div class="relative col-span-12 flex flex-col justify-between gap-12 sm:col-span-11">
-      <p class="note flex flex-wrap gap-x-4 gap-y-1 text-mortero">
-        <span>{business.owner}</span><span aria-hidden="true" class="text-replanteo">/</span><span>Reformas y albañilería</span>
-      </p>
-
-      <h1 id="hero-t" class="display text-[clamp(2.75rem,12.2vw,10rem)]">
+    <div class="max-w-3xl">
+      <h1 id="hero-t" class="display text-[clamp(3.25rem,11vw,9rem)]">
         <span class="block">Baños.</span>
-        <span class="block pl-[0.3em] sm:pl-[0.6em]">Cocinas.</span>
-        <span class="block">Obra<span class="text-replanteo">.</span></span>
+        <span class="block pl-[0.35em]">Cocinas.</span>
+        <span class="block">Obra.</span>
       </h1>
-
-      <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-        <p class="max-w-md text-lg leading-snug sm:text-xl">
-          Reformo baños y cocinas en Sant Boi y alrededores. Voy a ver la obra, la medimos y te paso el presupuesto por escrito.
-        </p>
-        <div class="flex flex-wrap gap-3">
-          <a href="#presupuesto" class="btn btn-primary">Pedir presupuesto <span aria-hidden="true">→</span></a>
-          <a href={whatsappUrl('Hola Alberto, quería información sobre una reforma.')} class="btn btn-ghost bg-cal/70" rel="noopener" target="_blank">WhatsApp</a>
-        </div>
+      <p class="mt-8 max-w-md text-lg leading-snug text-cal/90 sm:text-xl">
+        Reformo baños y cocinas en Sant Boi y alrededores. Mira cómo quedan: cada obra, de antes a después.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#obras" class="btn btn-primary">Ver obras <span aria-hidden="true">↓</span></a>
+        <a href={whatsappUrl('Hola Alberto, quería información sobre una reforma.')} class="btn btn-ghost" rel="noopener" target="_blank">WhatsApp</a>
       </div>
+    </div>
+
+    <div class="flex items-end justify-between gap-6">
+      <!-- Cinta métrica decorativa -->
+      <div class="tape hidden h-4 flex-1 text-cal/50 sm:block" aria-hidden="true"></div>
+      <button type="button" data-video-toggle aria-pressed="false" class="note shrink-0 border border-cal/40 px-3 py-2 hover:bg-cal hover:text-grafito">Pausar vídeos</button>
     </div>
   </div>
 </section>
+
+<script>
+  import '../scripts/videos';
+</script>

@@ -1,43 +1,42 @@
 ---
-import BathPlan from './plans/BathPlan.astro';
+import { Image } from 'astro:assets';
+import antes from '../assets/obras/bano-ducha-madera-antes.jpg';
+import despues from '../assets/obras/bano-ducha-madera-despues.jpg';
+
+const sizes = '(min-width: 1024px) 34rem, 92vw';
+const widths = [400, 640, 900];
 ---
 <section aria-labelledby="ab-t" class="on-dark grid-paper-dark border-b border-grafito bg-grafito text-cal">
-  <div class="mx-auto grid max-w-[90rem] gap-12 px-4 py-20 sm:px-8 sm:py-28 lg:grid-cols-12">
-    <div class="lg:col-span-4">
-      <p class="note text-replanteo-claro">02 — Antes / después</p>
+  <div class="mx-auto grid max-w-[90rem] items-center gap-12 px-4 py-20 sm:px-8 sm:py-28 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <p class="note text-cal/70">03 — Antes / después</p>
       <h2 id="ab-t" class="display mt-6 text-[clamp(2.25rem,5vw,4rem)]">Fuera la bañera.</h2>
       <p class="mt-6 max-w-sm text-lg text-cal/80">
-        El cambio más pedido en un baño: plato de ducha a ras de suelo, mampara fija y un mueble de lavabo donde antes no cabía.
+        Mismo baño, misma puerta. Suelo negro, bidé y bañera antes; plato de ducha, suelo efecto madera y luz después.
       </p>
-      <p class="note mt-10 text-cal/70">Arrastra el control para comparar</p>
+      <p class="note mt-10 flex items-center gap-3 text-cal/70"><span aria-hidden="true" class="text-lg">⇆</span> Arrastra para comparar</p>
     </div>
 
-    <figure class="lg:col-span-8">
-      <div data-compare class="relative aspect-[340/250] w-full select-none overflow-hidden border border-cal/20 bg-grafito-2" style="--pos:50%">
-        <div class="absolute inset-0 p-4 text-cal/90 sm:p-8">
-          <BathPlan state="despues" uid="ab" title="Después: ducha a ras de suelo" class="h-full w-full" />
-          <span class="note absolute right-3 top-3 bg-replanteo px-2 py-1 text-cal">Después</span>
+    <figure class="lg:col-span-6 lg:col-start-7">
+      <div data-compare class="relative mx-auto aspect-[4/5] w-full max-w-[34rem] select-none overflow-hidden bg-grafito-2" style="--pos:50%">
+        <Image src={despues} alt="Después: baño con plato de ducha, mampara y suelo efecto madera" widths={widths} sizes={sizes} class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+        <div class="absolute inset-0 [clip-path:inset(0_calc(100%-var(--pos))_0_0)]">
+          <Image src={antes} alt="Antes: baño con bañera, bidé y suelo negro" widths={widths} sizes={sizes} class="h-full w-full object-cover object-[60%_50%]" loading="lazy" />
         </div>
-        <div class="absolute inset-0 bg-grafito-2 p-4 text-cal/90 [clip-path:inset(0_calc(100%-var(--pos))_0_0)] sm:p-8">
-          <BathPlan state="antes" uid="ab" title="Antes: bañera" class="h-full w-full" />
-          <span class="note absolute left-3 top-3 bg-cal px-2 py-1 text-grafito">Antes</span>
-        </div>
-        <div class="pointer-events-none absolute inset-y-0 left-[var(--pos)] w-px bg-replanteo-claro" aria-hidden="true">
-          <span class="absolute top-1/2 left-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 place-items-center border border-replanteo-claro bg-grafito text-replanteo-claro">⇆</span>
+        <span class="note absolute left-3 top-3 bg-cal px-2 py-1 text-grafito">Antes</span>
+        <span class="note absolute right-3 top-3 bg-grafito px-2 py-1 text-cal">Después</span>
+        <div class="pointer-events-none absolute inset-y-0 left-[var(--pos)] w-0.5 -translate-x-1/2 bg-cal" aria-hidden="true">
+          <span class="absolute left-1/2 top-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-cal bg-grafito text-cal">⇆</span>
         </div>
         <label class="sr-only" for="compare-range">Posición de la comparación antes y después</label>
         <input id="compare-range" type="range" min="0" max="100" value="50" class="absolute inset-0 h-full w-full cursor-ew-resize opacity-0" />
       </div>
-      <figcaption class="note mt-4 flex justify-between gap-4 text-cal/70">
-        <span>Planta 2,40 × 1,70 m · ilustración</span>
-        <span class="text-right">En la web final: fotos reales de tus obras</span>
-      </figcaption>
+      <figcaption class="note mx-auto mt-4 max-w-[34rem] text-cal/70">Obra real · @amm_reformas</figcaption>
     </figure>
   </div>
 </section>
 
 <script>
-  // Comparador accesible: un <input type="range"> nativo controla el recorte.
   for (const root of document.querySelectorAll<HTMLElement>('[data-compare]')) {
     const range = root.querySelector<HTMLInputElement>('input[type="range"]');
     if (!range) continue;

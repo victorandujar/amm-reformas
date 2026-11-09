@@ -1,0 +1,11 @@
+---
+import mark from '../assets/brand/amm-mark.svg?raw';
+import lockup from '../assets/brand/amm-lockup.svg?raw';
+import full from '../assets/brand/amm-full.svg?raw';
+
+/** Logotipo vectorizado de AMM Reformas. Hereda el color (currentColor). */
+interface Props { variant: 'mark' | 'lockup' | 'full'; class?: string }
+const { variant, class: cls = '' } = Astro.props;
+const svg = { mark, lockup, full }[variant].replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
+---
+<span class:list={['inline-block [&>svg]:h-full [&>svg]:w-auto', cls]} set:html={svg} />
