@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
+import Obras from '../components/Obras.astro';
+import Process from '../components/Process.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import Footer from '../components/Footer.astro';
+import MobileCallBar from '../components/MobileCallBar.astro';
+---
+<Base
+  title="AMM Reformas · Reformas de baños y cocinas en Sant Boi de Llobregat"
+  description="Alberto Manjón: reformas de baños, cocinas y albañilería en Sant Boi de Llobregat. Visita, medición y presupuesto por escrito. Llama al 637 95 89 94."
+  schema
+>
+  <Header />
+  <main id="contenido">
+    <Hero />
+    <Services />
+    <BeforeAfter />
+    <Obras />
+    <Process />
+    <QuoteForm />
+  </main>
+  <Footer />
+  <MobileCallBar />
+</Base>

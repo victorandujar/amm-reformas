@@ -1,0 +1,60 @@
+---
+import Cota from './Cota.astro';
+
+/** Planta de baño 2,40 × 1,70 m (1 m = 100 u). `antes`: bañera · `despues`: ducha a ras de suelo. */
+interface Props {
+  state: 'antes' | 'despues';
+  class?: string;
+  animate?: boolean;
+  title: string;
+  uid?: string;
+}
+const { state, class: cls = '', animate = false, title, uid = 'bath' } = Astro.props;
+const id = `${uid}-${state}`;
+---
+<svg viewBox="0 0 340 250" class:list={[cls, animate && 'draw']} role="img" aria-labelledby={`${id}-t`} fill="none" stroke-linecap="square">
+  <title id={`${id}-t`}>{title}</title>
+  <g stroke="currentColor">
+    <!-- Muros: doble línea -->
+    <path pathLength="1" stroke-width="2.5" d="M40 40 H280 V210 H252 M200 210 H40 Z" style="--d:0" />
+    <path pathLength="1" stroke-width="1" d="M32 32 H288 V218 H252 M200 218 H32 Z" style="--d:100" />
+    <!-- Puerta 0,52 m con barrido -->
+    <path pathLength="1" stroke-width="1" d="M252 210 V158" style="--d:400" />
+    <path pathLength="1" stroke-width="0.75" stroke-dasharray="2 3" d="M252 158 A52 52 0 0 0 200 210" style="--d:450" />
+    <!-- Inodoro (pared derecha) -->
+    <g stroke-width="1.25" style="--d:600">
+      <rect pathLength="1" x="262" y="92" width="14" height="36" />
+      <path pathLength="1" d="M262 96 C232 96 226 110 226 110 C226 110 232 124 262 124" />
+    </g>
+    {state === 'antes' ? (
+      <g stroke-width="1.25" style="--d:700">
+        <!-- Bañera 1,70 × 0,70 -->
+        <rect pathLength="1" x="44" y="44" width="170" height="70" />
+        <rect pathLength="1" x="54" y="52" width="150" height="54" rx="24" />
+        <circle pathLength="1" cx="72" cy="79" r="4" />
+        <!-- Lavabo pequeño -->
+        <path pathLength="1" d="M44 160 H96 V206 H44" />
+        <path pathLength="1" d="M52 168 H88 V198 H52 Z" />
+      </g>
+    ) : (
+      <g stroke-width="1.25" style="--d:700">
+        <!-- Plato de ducha 1,40 × 0,80, sumidero lineal -->
+        <rect pathLength="1" x="44" y="44" width="140" height="80" />
+        <line pathLength="1" x1="54" y1="56" x2="54" y2="112" stroke-width="2" />
+        <path pathLength="1" stroke-width="0.5" d="M64 44 L184 124 M84 44 L184 110 M104 44 L184 96 M44 64 L134 124 M44 84 L104 124" opacity="0.35" />
+        <!-- Mueble de lavabo 1,00 × 0,46 -->
+        <rect pathLength="1" x="44" y="160" width="100" height="46" />
+        <path pathLength="1" d="M62 168 H126 V196 H62 Z" />
+        <circle pathLength="1" cx="94" cy="182" r="3" />
+      </g>
+    )}
+  </g>
+  {state === 'despues' && (
+    <line class="text-replanteo" stroke="currentColor" stroke-width="3" x1="184" y1="44" x2="184" y2="104" pathLength="1" style="--d:900" />
+  )}
+  <Cota x1={40} y1={18} x2={280} y2={18} label="2,40" delay={1000} />
+  <Cota x1={306} y1={40} x2={306} y2={210} label="1,70" delay={1100} />
+  {state === 'antes'
+    ? <Cota x1={44} y1={132} x2={214} y2={132} label="BAÑERA 1,70" delay={1200} />
+    : <Cota x1={44} y1={140} x2={184} y2={140} label="DUCHA 1,40" delay={1200} />}
+</svg>

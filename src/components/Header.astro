@@ -1,0 +1,29 @@
+---
+import { business, telUrl } from '../data/business';
+
+const links = [
+  { href: '#oficio', label: 'Oficio' },
+  { href: '#obras', label: 'Obras' },
+  { href: '#proceso', label: 'Cómo trabajo' },
+];
+---
+<header class="sticky top-0 z-40 border-b border-junta/80 bg-cal/90 backdrop-blur-sm">
+  <div class="mx-auto flex h-16 max-w-[90rem] items-center justify-between gap-6 px-4 sm:px-8">
+    <a href="/" class="group flex items-baseline gap-2" aria-label={`${business.name}, inicio`}>
+      <span class="display text-2xl leading-none">AMM</span>
+      <span class="h-4 w-[3px] translate-y-0.5 bg-replanteo transition-all group-hover:h-5" aria-hidden="true"></span>
+      <span class="note text-mortero">Reformas</span>
+    </a>
+    <nav aria-label="Principal" class="hidden md:block">
+      <ul class="flex items-center gap-8">
+        {links.map((l) => (
+          <li><a href={l.href} class="note relative py-2 hover:text-replanteo">{l.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href={telUrl} class="note hidden tabular-nums lg:inline hover:text-replanteo">{business.phone.display}</a>
+      <a href="#presupuesto" class="btn btn-primary min-h-10 py-2">Presupuesto</a>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,35 @@
+---
+import { business, telUrl } from '../data/business';
+import { isDemo } from '../lib/site';
+const year = new Date().getFullYear();
+---
+<footer class="on-dark border-t border-cal/15 bg-grafito pb-24 text-cal md:pb-0">
+  <div class="mx-auto max-w-[90rem] px-4 py-14 sm:px-8">
+    <p class="display text-[clamp(3rem,17vw,15rem)] leading-[0.8] text-cal/10" aria-hidden="true">AMM</p>
+    <div class="mt-10 grid gap-10 border-t border-cal/20 pt-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div>
+        <p class="note text-cal/60">Negocio</p>
+        <p class="mt-2">{business.name}<br />{business.owner}</p>
+      </div>
+      <div>
+        <p class="note text-cal/60">Contacto</p>
+        <p class="mt-2"><a href={telUrl} class="tabular-nums hover:text-replanteo-claro">{business.phone.display}</a><br /><a href={business.instagram.url} rel="noopener" target="_blank" class="hover:text-replanteo-claro">{business.instagram.handle}</a></p>
+      </div>
+      <div>
+        <p class="note text-cal/60">Zona</p>
+        <p class="mt-2">{business.city}<br />{business.region}</p>
+      </div>
+      <nav aria-label="Legal">
+        <p class="note text-cal/60">Legal</p>
+        <ul class="mt-2">
+          <li><a href="/aviso-legal" class="hover:text-replanteo-claro">Aviso legal</a></li>
+          <li><a href="/privacidad" class="hover:text-replanteo-claro">Privacidad</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="note mt-14 flex flex-wrap justify-between gap-4 text-cal/60">
+      <span>© {year} {business.name}</span>
+      {isDemo && <span>Propuesta no oficial · Web Local Growth</span>}
+    </p>
+  </div>
+</footer>

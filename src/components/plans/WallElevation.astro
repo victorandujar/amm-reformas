@@ -1,0 +1,28 @@
+---
+import Cota from './Cota.astro';
+
+/** Alzado de tabique de ladrillo con apertura y dintel. */
+interface Props { class?: string; animate?: boolean; title: string }
+const { class: cls = '', animate = false, title } = Astro.props;
+const rows = Array.from({ length: 12 }, (_, i) => 40 + i * 16);
+---
+<svg viewBox="0 0 340 270" class:list={[cls, animate && 'draw']} role="img" aria-labelledby="wall-t" fill="none">
+  <title id="wall-t">{title}</title>
+  <defs>
+    <pattern id="brick" width="40" height="32" patternUnits="userSpaceOnUse">
+      <path d="M0 0 H40 M0 16 H40 M20 0 V16 M0 16 V32 M40 16 V32" stroke="currentColor" stroke-width="0.6" opacity="0.45" />
+    </pattern>
+    <mask id="hueco"><rect x="0" y="0" width="340" height="270" fill="white" /><rect x="140" y="104" width="72" height="128" fill="black" /></mask>
+  </defs>
+  <rect x="40" y="40" width="256" height="192" fill="url(#brick)" mask="url(#hueco)" />
+  <g stroke="currentColor">
+    <rect pathLength="1" stroke-width="2" x="40" y="40" width="256" height="192" />
+    <rect pathLength="1" stroke-width="1.5" x="140" y="104" width="72" height="128" style="--d:300" />
+    <!-- Dintel -->
+    <rect pathLength="1" class="text-replanteo" stroke-width="2" x="128" y="92" width="96" height="12" style="--d:600" />
+    <line pathLength="1" stroke-width="1" x1="20" y1="232" x2="316" y2="232" style="--d:100" />
+  </g>
+  <Cota x1={140} y1={248} x2={212} y2={248} label="0,90" delay={900} />
+  <Cota x1={238} y1={104} x2={238} y2={232} label="2,10" delay={1000} />
+  <text x="40" y="28" class="fill-current" font-family="JetBrains Mono, monospace" font-size="9" opacity="0.7">{rows.length} HILADAS · LADRILLO</text>
+</svg>
