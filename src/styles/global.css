@@ -1,25 +1,25 @@
 @import "tailwindcss";
-@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource/poppins/latin-400.css";
+@import "@fontsource/poppins/latin-500.css";
+@import "@fontsource/poppins/latin-700.css";
 @import "@fontsource/jetbrains-mono/latin-400.css";
 @import "@fontsource/jetbrains-mono/latin-500.css";
 
-/* ——— Dirección de arte "A pie de obra" ———
-   cal: yeso y cal · grafito: lápiz de carpintero · mortero: líneas de cota
-   replanteo: tiza roja del cordel de replanteo (único acento) */
+/* ——— Marca AMM Reformas: blanco y negro (logotipo), tipografía geométrica ———
+   Dirección "A pie de obra": cinta métrica, cotas y anotaciones en mono.
+   El color lo ponen sus obras (fotos y vídeos), no la interfaz. */
 @theme {
-  --color-cal: #f1ede4;
-  --color-cal-2: #e8e3d7;
-  --color-junta: #d6cfc1;
-  --color-mortero: #6f6a61; /* AA sobre cal (5.0:1) */
-  --color-grafito: #1f1f1d;
-  --color-grafito-2: #2b2b28;
-  --color-replanteo: #b8452a; /* AA sobre cal (4.6:1) y con texto cal */
-  --color-replanteo-claro: #e07a5c;
+  --color-cal: #f5f4f1;     /* blanco roto */
+  --color-cal-2: #ebe9e4;
+  --color-junta: #d9d6cf;
+  --color-mortero: #615e58; /* AA sobre cal */
+  --color-grafito: #111111; /* negro del logotipo */
+  --color-grafito-2: #1b1b1a;
+  --color-acento: #111111;
+  --color-acento-inv: #ffffff;
 
-  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  --breakpoint-xs: 26rem;
 }
 
 @layer base {
@@ -37,29 +37,21 @@
     color: var(--color-grafito);
     font-family: var(--font-sans);
     font-size: 1.0625rem;
-    line-height: 1.6;
-    text-rendering: optimizeLegibility;
+    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
   }
-  ::selection { background: var(--color-replanteo); color: var(--color-cal); }
-  :focus-visible {
-    outline: 2px solid var(--color-replanteo);
-    outline-offset: 3px;
-  }
+  ::selection { background: var(--color-grafito); color: var(--color-cal); }
+  :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 }
 
 @layer components {
-  /* Titulares de rotulación: Archivo expandido */
   .display {
     font-family: var(--font-sans);
-    font-variation-settings: "wdth" 125;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 0.9;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.92;
     text-transform: uppercase;
   }
-  .wide { font-variation-settings: "wdth" 118; }
-  /* Anotación de plano: mono, mayúsculas, pequeña */
   .note {
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -81,17 +73,13 @@
     text-transform: uppercase;
     transition: background-color 150ms, color 150ms, border-color 150ms;
   }
-  .btn-primary {
-    background: var(--color-replanteo);
-    border-color: var(--color-replanteo);
-    color: var(--color-cal);
-  }
-  .btn-primary:hover { background: var(--color-grafito); border-color: var(--color-grafito); }
+  .btn-primary { background: var(--color-grafito); border-color: var(--color-grafito); color: var(--color-cal); }
+  .btn-primary:hover { background: transparent; color: var(--color-grafito); }
   .btn-ghost:hover { background: var(--color-grafito); color: var(--color-cal); border-color: var(--color-grafito); }
+  .on-dark .btn-primary { background: var(--color-cal); border-color: var(--color-cal); color: var(--color-grafito); }
+  .on-dark .btn-primary:hover { background: transparent; color: var(--color-cal); }
   .on-dark .btn-ghost:hover { background: var(--color-cal); color: var(--color-grafito); border-color: var(--color-cal); }
-  .on-dark .btn-primary:hover { background: var(--color-cal); border-color: var(--color-cal); color: var(--color-grafito); }
 
-  /* Rejilla de papel milimetrado muy tenue */
   .grid-paper {
     background-image:
       linear-gradient(to right, color-mix(in oklab, var(--color-junta) 55%, transparent) 1px, transparent 1px),
@@ -100,18 +88,17 @@
   }
   .grid-paper-dark {
     background-image:
-      linear-gradient(to right, rgb(241 237 228 / 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(241 237 228 / 0.05) 1px, transparent 1px);
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
     background-size: 2rem 2rem;
   }
-
-  /* Trazo de plano que se "dibuja" al entrar */
-  .draw path, .draw line, .draw rect, .draw circle, .draw polyline {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: draw 1.8s cubic-bezier(.6,.1,.2,1) forwards;
-    animation-delay: calc(var(--d, 0) * 1ms + 200ms);
+  /* Cinta métrica: marcas cada 10 % y submarcas cada 2 % */
+  .tape {
+    background-image:
+      repeating-linear-gradient(to right, currentColor 0 1px, transparent 1px 10%),
+      repeating-linear-gradient(to right, color-mix(in oklab, currentColor 45%, transparent) 0 1px, transparent 1px 2%);
+    background-size: 100% 100%, 100% 45%;
+    background-position: 0 0, 0 0;
+    background-repeat: no-repeat;
   }
 }
-
-@keyframes draw { to { stroke-dashoffset: 0; } }

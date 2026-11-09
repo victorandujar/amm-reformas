@@ -2,22 +2,22 @@
 import { business, telUrl } from '../data/business';
 
 const tipos = ['Baño', 'Cocina', 'Albañilería', 'Otra obra'];
-const field = 'w-full border-0 border-b-[1.5px] border-cal/40 bg-transparent px-0 py-3 text-lg text-cal placeholder:text-cal/35 focus:border-replanteo-claro focus:outline-none focus:ring-0 aria-[invalid=true]:border-replanteo-claro';
+const field = 'w-full border-0 border-b-[1.5px] border-cal/40 bg-transparent px-0 py-3 text-lg text-cal placeholder:text-cal/35 focus:border-cal focus:outline-none focus:ring-0 aria-[invalid=true]:border-cal aria-[invalid=true]:border-dashed';
 ---
 <section id="presupuesto" aria-labelledby="presupuesto-t" class="on-dark bg-grafito text-cal">
   <div class="mx-auto grid max-w-[90rem] gap-16 px-4 py-20 sm:px-8 sm:py-28 lg:grid-cols-12">
     <div class="lg:col-span-5">
-      <p class="note text-replanteo-claro">05 — Presupuesto</p>
+      <p class="note text-cal/70">05 — Presupuesto</p>
       <h2 id="presupuesto-t" class="display mt-6 text-[clamp(2.5rem,7vw,5.5rem)]">Cuéntame<br />tu obra.</h2>
       <p class="mt-8 max-w-sm text-lg text-cal/80">Rellena cuatro datos y se abre WhatsApp con el mensaje preparado. Si lo prefieres, llama directamente.</p>
       <dl class="mt-12 grid gap-6 border-t border-cal/20 pt-8">
         <div>
           <dt class="note text-cal/70">Teléfono</dt>
-          <dd><a href={telUrl} class="wide text-3xl font-bold tabular-nums hover:text-replanteo-claro sm:text-4xl">{business.phone.display}</a></dd>
+          <dd><a href={telUrl} class="text-3xl font-bold tabular-nums hover:underline sm:text-4xl">{business.phone.display}</a></dd>
         </div>
         <div>
           <dt class="note text-cal/70">Instagram</dt>
-          <dd><a href={business.instagram.url} rel="noopener" target="_blank" class="text-xl underline decoration-replanteo-claro underline-offset-4 hover:text-replanteo-claro">{business.instagram.handle}</a></dd>
+          <dd><a href={business.instagram.url} rel="noopener" target="_blank" class="text-xl underline decoration-cal/60 underline-offset-4 hover:underline">{business.instagram.handle}</a></dd>
         </div>
         <div>
           <dt class="note text-cal/70">Zona</dt>
@@ -33,23 +33,23 @@ const field = 'w-full border-0 border-b-[1.5px] border-cal/40 bg-transparent px-
           {tipos.map((t, i) => (
             <label class="cursor-pointer">
               <input type="radio" name="tipo" value={t} class="peer sr-only" required aria-describedby="err-tipo" checked={i === 0} />
-              <span class="note inline-flex min-h-11 items-center border-[1.5px] border-cal/40 px-4 py-2 text-cal transition-colors peer-checked:border-replanteo-claro peer-checked:bg-replanteo peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-replanteo-claro hover:border-cal">{t}</span>
+              <span class="note inline-flex min-h-11 items-center border-[1.5px] border-cal/40 px-4 py-2 text-cal transition-colors peer-checked:border-cal peer-checked:bg-cal peer-checked:text-grafito peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-cal hover:border-cal">{t}</span>
             </label>
           ))}
         </div>
-        <p id="err-tipo" class="note mt-2 min-h-5 text-replanteo-claro" aria-live="polite"></p>
+        <p id="err-tipo" class="note mt-2 min-h-5 text-cal" aria-live="polite"></p>
       </fieldset>
 
       <div class="grid gap-10 sm:grid-cols-2">
         <div>
           <label for="nombre" class="note text-cal/70">Nombre</label>
           <input id="nombre" name="nombre" type="text" autocomplete="given-name" required minlength="2" maxlength="60" class={field} aria-describedby="err-nombre" />
-          <p id="err-nombre" class="note mt-2 min-h-5 text-replanteo-claro" aria-live="polite"></p>
+          <p id="err-nombre" class="note mt-2 min-h-5 text-cal" aria-live="polite"></p>
         </div>
         <div>
           <label for="municipio" class="note text-cal/70">Municipio de la obra</label>
           <input id="municipio" name="municipio" type="text" autocomplete="address-level2" required maxlength="60" placeholder="Ej.: Sant Boi" class={field} aria-describedby="err-municipio" />
-          <p id="err-municipio" class="note mt-2 min-h-5 text-replanteo-claro" aria-live="polite"></p>
+          <p id="err-municipio" class="note mt-2 min-h-5 text-cal" aria-live="polite"></p>
         </div>
       </div>
 
@@ -57,12 +57,12 @@ const field = 'w-full border-0 border-b-[1.5px] border-cal/40 bg-transparent px-
         <div>
           <label for="metros" class="note text-cal/70">m² aprox. <span class="text-cal/50">(opcional)</span></label>
           <input id="metros" name="metros" type="text" inputmode="decimal" maxlength="7" placeholder="6" class={field} aria-describedby="err-metros" />
-          <p id="err-metros" class="note mt-2 min-h-5 text-replanteo-claro" aria-live="polite"></p>
+          <p id="err-metros" class="note mt-2 min-h-5 text-cal" aria-live="polite"></p>
         </div>
         <div class="sm:col-span-2">
           <label for="detalle" class="note text-cal/70">Qué quieres hacer <span class="text-cal/50">(opcional)</span></label>
           <textarea id="detalle" name="detalle" rows="1" maxlength="600" placeholder="Quitar la bañera y poner ducha…" class:list={[field, 'field-sizing-content min-h-12 resize-none']} aria-describedby="err-detalle"></textarea>
-          <p id="err-detalle" class="note mt-2 min-h-5 text-replanteo-claro" aria-live="polite"></p>
+          <p id="err-detalle" class="note mt-2 min-h-5 text-cal" aria-live="polite"></p>
         </div>
       </div>
 
