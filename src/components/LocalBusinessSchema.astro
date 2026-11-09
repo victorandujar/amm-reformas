@@ -1,0 +1,35 @@
+---
+import { business } from '../data/business';
+import { services } from '../data/services';
+
+// Solo datos verificados. Sin aggregateRating, horario ni dirección hasta confirmarlos.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  '@id': new URL('/#negocio', Astro.site).href,
+  name: business.name,
+  url: Astro.site?.href,
+  telephone: business.phone.e164,
+  founder: { '@type': 'Person', name: business.owner },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: business.city,
+    addressRegion: business.region,
+    addressCountry: 'ES',
+    ...(business.streetAddress ? { streetAddress: business.streetAddress } : {}),
+    ...(business.postalCode ? { postalCode: business.postalCode } : {}),
+  },
+  areaServed: business.areaServed.map((name) => ({ '@type': 'AdministrativeArea', name })),
+  sameAs: [business.instagram.url],
+  knowsAbout: services.map((s) => `Reforma de ${s.title.toLowerCase()}`),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios de reforma',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.title, description: s.lead },
+    })),
+  },
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
