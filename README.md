@@ -91,7 +91,6 @@ En modo demo el SEO de Lighthouse baja a 66. Es intencionado, por el `noindex`.
 ## Ejecutar
 
 ```bash
-cd projects/amm-reformas
 npm install
 npm run dev      # http://localhost:4321
 npm run build    # astro check + build → dist/
@@ -103,7 +102,7 @@ Requiere Node ≥ 22.
 ## Desplegar en Vercel
 
 1. Importar el repositorio en Vercel.
-2. **Root Directory:** `projects/amm-reformas`. Framework: Astro, que se detecta solo.
+2. **Root Directory:** la raíz del repo (por defecto). Framework: Astro, que se detecta solo.
 3. Variables de entorno: `PUBLIC_IS_DEMO=true` (y `SITE_URL` si se usa un dominio propio de la preview).
 4. `vercel.json` ya incluye URLs limpias, cabeceras de seguridad y caché inmutable para `/_astro/*`.
 
