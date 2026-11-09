@@ -1,0 +1,31 @@
+---
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import { isDemo } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: boolean;
+}
+const { title, description, schema = false } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1f1f1d" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Seo title={title} description={description} />
+    {schema && <LocalBusinessSchema />}
+  </head>
+  <body class="min-h-dvh">
+    <a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:bg-grafito focus:px-4 focus:py-2 focus:text-cal">Saltar al contenido</a>
+    {isDemo && <DemoBanner />}
+    <slot />
+  </body>
+</html>
